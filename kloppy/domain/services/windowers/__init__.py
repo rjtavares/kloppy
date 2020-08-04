@@ -2,7 +2,7 @@ from abc import abstractmethod, ABCMeta
 from typing import List, Union, Callable, Any
 
 from kloppy.domain import Score, EventDataset, Event, ShotEvent, ShotResult, State, Window
-from kloppy.domain.models.event import SubstitutionEvent, POSSESSION_GAINING_EVENTS
+from kloppy.domain.models.event import SubstitutionEvent
 
 
 class Comparable(metaclass=ABCMeta):
@@ -22,10 +22,6 @@ class Windower:
             if event.result == ShotResult.GOAL:
                 new_state = current_state.add_goal(event.team)
 
-        if event.event_type in POSSESSION_GAINING_EVENTS:
-            if event.team != current_state.possession_team:
-                new_state = current_state.change_possession_team(event.team)
-
         if not new_state:
             return False, current_state
         else:
@@ -43,8 +39,7 @@ class Windower:
             players=(
                 set(player for player in dataset.metadata.teams[0].players if player.starting)
                 | set(player for player in dataset.metadata.teams[1].players if player.starting)
-            ),
-            possession_team=None
+            )
         )
 
         current_window = Window(
