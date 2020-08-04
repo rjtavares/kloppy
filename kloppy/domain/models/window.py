@@ -9,17 +9,20 @@ from kloppy.domain.models.event import Event
 class State:
     score: Score
     players: Set[Player]
+    possession_team: Team
 
     def remove_player(self, player: Player) -> 'State':
         return State(
             players=self.players - {player},
-            score=self.score
+            score=self.score,
+            possession_team=self.possession_team
         )
 
     def add_player(self, player: Player) -> 'State':
         return State(
             players=self.players | {player},
-            score=self.score
+            score=self.score,
+            possession_team=self.possession_team
         )
 
     def add_goal(self, team: Team) -> 'State':
@@ -32,13 +35,22 @@ class State:
 
         return State(
             players=self.players,
-            score=score
+            score=score,
+            possession_team=self.possession_team
         )
 
     def add_away_goal(self) -> 'State':
         return State(
             players=self.players,
-            score=Score(home=self.score.home + 1, away=self.score.away)
+            score=Score(home=self.score.home + 1, away=self.score.away),
+            possession_team=self.possession_team
+        )
+
+    def change_possession_team(self, team: Team) -> 'State':
+        return State(
+            players=self.players,
+            score=self.score,
+            possession_team=team
         )
 
 

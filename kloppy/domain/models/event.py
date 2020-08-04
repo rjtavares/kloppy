@@ -75,6 +75,7 @@ class EventType(Enum):
     PLAYER_ON = "PLAYER_ON"
     PLAYER_OFF = "PLAYER_OFF"
 
+POSSESSION_GAINING_EVENTS = (EventType.PASS, EventType.SHOT, EventType.TAKE_ON, EventType.CARRY)
 
 @dataclass
 class Event(DataRecord, ABC):
